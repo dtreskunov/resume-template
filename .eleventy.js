@@ -1,9 +1,11 @@
+import fs from 'fs'
+import path from 'path'
+
 import { EleventyHtmlBasePlugin } from '@11ty/eleventy'
 import pluginRss from '@11ty/eleventy-plugin-rss'
 import markdownIt from 'markdown-it'
 import markdownItAttrs from 'markdown-it-attrs'
 import pluginIcons from 'eleventy-plugin-icons'
-import path from 'path'
 
 import * as filters from './utils/filters.js'
 import * as transforms from './utils/transforms.js'
@@ -18,7 +20,9 @@ import meta from './src/data/meta.json' with { type: 'json' };
  */
 export default async function (config) {
     const BASE_URL = new URL(meta.url)
-    const PATH_PREFIX = BASE_URL.pathname
+    const PATH_PREFIX = process.env.PATH_PREFIX || BASE_URL.pathname
+    const BUILD_OUTPUT_DIR = process.env.BUILD_OUTPUT_DIR || 'dist'
+    const BUILD_ENV = process.env.BUILD_ENV || 'env'
 
     // Plugins
     config.addPlugin(EleventyHtmlBasePlugin)
@@ -138,12 +142,23 @@ export default async function (config) {
     config.addGlobalData('additionalCss', Object.entries(cssVariables)
         .map( ([name, val]) => `--${name}:${val}` ).join(';'))
 
+    {
+        const buildEnvData = {
+            PATH_PREFIX: PATH_PREFIX
+        }
+        const buildEnvContents = Object.entries(buildEnvData)
+            .map(([key, value]) => key + "=" + value)
+            .join('\n')
+        fs.mkdirSync(path.dirname(BUILD_ENV), { recursive: true })
+        fs.appendFileSync(BUILD_ENV, buildEnvContents)
+    }
+
     // Base Config
     return {
         pathPrefix: PATH_PREFIX,
         dir: {
             input: 'src',
-            output: 'dist',
+            output: BUILD_OUTPUT_DIR,
             includes: 'includes',
             layouts: 'layouts',
             data: 'data'

@@ -1,0 +1,97 @@
+variables:
+  LC_ALL: C.UTF-8
+  PAGES_BRANCH: gitlab-pages
+  BUILD_OUTPUT_DIR: dist
+  BUILD_ENV: ./env
+  PARALLEL_DEPLOYMENTS: false
+
+before_script:
+  - git config --global --add safe.directory "$CI_PROJECT_DIR"
+
+build:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $PAGES_BRANCH
+      when: never
+    - when: always
+  image: ghcr.io/puppeteer/puppeteer:latest
+  script: |
+    npm ci
+
+    if [ $PARALLEL_DEPLOYMENTS != true ]; then
+      export PATH_PREFIX=/
+    elif [ $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH ]; then
+      export PATH_PREFIX=$CI_COMMIT_REF_SLUG
+    fi;
+    npm run build
+  artifacts:
+    paths:
+      - $BUILD_OUTPUT_DIR
+      - $BUILD_ENV
+
+push-to-pages-branch:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  needs:
+    - job: build
+      artifacts: true
+  script:
+    - shopt -s dotglob
+    - TEMP=$(mktemp -d)
+    - mv $BUILD_OUTPUT_DIR $TEMP
+    - mv $BUILD_ENV $TEMP
+    - cp $CI_CONFIG_PATH $TEMP
+    - |
+      [ -n "$PUSH_TOKEN" ] || (echo "Please define PUSH_TOKEN in Settings > Access Tokens with read_repository and write_repository scopes" && exit 1)
+    - git remote set-url origin ${CI_REPOSITORY_URL/gitlab-ci-token:*@/oauth2:$PUSH_TOKEN@}
+    - git fetch
+    - git checkout "$PAGES_BRANCH" 2>/dev/null || git checkout --orphan "$PAGES_BRANCH"
+
+    - find . -maxdepth 1 -not -name . -not -name .git -exec rm -rf {} \;
+    - mv $TEMP/* .
+
+    - git reset
+    - git add .
+    - git config user.email "my-email@email.com"
+    - git config user.name "ci-bot"
+    - git commit -m "Source commit $CI_COMMIT_SHORT_SHA / $CI_JOB_URL"
+    - git push --set-upstream origin $PAGES_BRANCH
+
+deploy-nondefault-branch:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $PAGES_BRANCH
+      when: never
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: never
+    - if: $PARALLEL_DEPLOYMENTS
+      when: always
+  needs:
+    - job: build
+      artifacts: true
+  script: |
+    if [ -f "$BUILD_ENV" ]; then
+      cat $BUILD_ENV
+      cat $BUILD_ENV >> $GITLAB_ENV
+    fi;
+  pages:
+    path_prefix: $PATH_PREFIX
+    publish: $BUILD_OUTPUT_DIR
+    expire_in: 1 month
+  environment:
+    name: $CI_COMMIT_BRANCH
+    url: $CI_PAGES_URL
+
+deploy-pages-branch:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $PAGES_BRANCH
+  script: |
+    if [ -f "$BUILD_ENV" ]; then
+      cat $BUILD_ENV
+      cat $BUILD_ENV >> $GITLAB_ENV
+    fi;
+  pages:
+    path_prefix: $PATH_PREFIX
+    publish: $BUILD_OUTPUT_DIR
+    expire_in: never
+  environment:
+    name: $CI_COMMIT_BRANCH
+    url: $CI_PAGES_URL
