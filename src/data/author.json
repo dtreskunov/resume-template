@@ -7,28 +7,6 @@
     "email": "anna.quincey@gmail.com",
     "telephone": "+01 23 456 789",
     "website": "https://some.website",
-    "skills": [
-        "HTML",
-        "CSS",
-        "Javascript / ES6",
-        "UI Design",
-        "React",
-        "Git"
-    ],
-    "languages": [
-        {
-            "name": "English",
-            "level": "native"
-        },
-        {
-            "name": "German",
-            "level": "fluent"
-        },
-        {
-            "name": "French",
-            "level": "basic"
-        }
-    ],
     "social": [
         {
             "name": "Github",

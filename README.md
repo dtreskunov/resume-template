@@ -91,16 +91,6 @@ Open `src/data/author.json` and edit the information describing yourself. The fo
             <td>optional</td>
         </tr>
         <tr>
-            <td><code>skills</code></td>
-            <td>an array of strings describing your skillset</td>
-            <td>optional</td>
-        </tr>
-        <tr>
-            <td><code>languages</code></td>
-            <td>an array of objects describing your spoken languages; each object should include a <code>name</code> (e.g. "English") and <code>level</code> (e.g. "fluent") property</td>
-            <td>optional</td>
-        </tr>
-        <tr>
             <td><code>social</code></td>
             <td>an array of objects for each social profile you want to link; each object should include a <code>name</code> (e.g. "Github"), <code>user</code> (e.g. "@maxboeck") and <code>url</code> (e.g. "https://github.com/maxboeck") property</td>
             <td>optional</td>
@@ -166,9 +156,10 @@ If you want, you can include the five most starred repositories from your Github
 
 ### 5. Custom Content
 
-Edit `entries/content/custom.md` if you want to edit freeform content to the end of the CV. This could be a legal disclaimer or an additional section. Delete the file if you don't want this section to show up. 
+Edit the files in `entries/content/custom` if you want to add freeform content to the end of the CV. This could be a legal disclaimer or an additional section. Delete the files if you don't want these sections to show up. 
 
-To add another section, add another entry with `tags: custom` in the [frontmatter](https://www.11ty.dev/docs/data-frontmatter/) data.
+If the custom content section doesn't contain a lot of text, you can make it take up less space by adding `narrow: true`
+to add another section, add another entry with `tags: custom` in the [frontmatter](https://www.11ty.dev/docs/data-frontmatter/) data.
 
 ### 6. Meta Data & Design
 
@@ -213,12 +204,20 @@ Supported properties are:
     </tbody>
 </table>
 
-This template will create a PDF file by opening a virtual Chrome browser and using the "Print to PDF" feature.
-To adjust printable features, such as orientation, column count, font size, etc. edit `src/assets/styles/utils/_variables.scss`.
-
 ### 7. Internationalization
 
 There are a few hardcoded english strings used in the template, such as the section titles and some labels. If you want to change the default language from english to something else, you can translate these strings by changing the values in `data/strings.json`.
+
+### 8. Printable Output
+
+To adjust printable features, such as orientation, column count, font size, etc. edit
+`src/assets/styles/utils/_variables.scss`. This template will create a PDF file by opening a virtual Chrome browser
+and using the "Print to PDF" feature.
+
+### 9. QR Code With Contact Information
+
+A QR code encoding your contact information as a [vCard](https://en.wikipedia.org/wiki/VCard) will be included in
+the printed version.
 
 ## Credits
 

@@ -4,45 +4,19 @@ layout: base
 
 <main class="main container">
 
-        <section class="section" id="section-education">
-            <h2 class="section__title">{{ strings.titles.education }}</h2>
-            {% set entries = collections.education %}
-            {% set microformat = "h-event p-education" %}
-            {% include "entrylist.njk" %}
-        </section>
+    <section class="section" id="section-education">
+        <h2 class="section__title">{{ strings.titles.education }}</h2>
+        {% set entries = collections.education %}
+        {% set microformat = "h-event p-education" %}
+        {% include "entrylist.njk" %}
+    </section>
 
-        <section class="section" id="section-experience">
-            <h2 class="section__title">{{ strings.titles.experience }}</h2>
-            {% set entries = collections.work %}
-            {% set microformat = "h-event p-experience" %}
-            {% include "entrylist.njk" %}
-        </section>
-
-    {% if author.skills or author.languages %}
-        <div class="grid grid--2col">
-            {% if author.skills %}
-            <section class="section section--half" id="section-skills">
-                <h2 class="section__title">{{ strings.titles.skills }}</h2>
-                <ul class="bulletlist">
-                {% for skill in author.skills %}
-                    <li class="p-skill">{{ skill }}</li>
-                {% endfor %}
-                </ul>
-            </section>
-            {% endif %}
-
-            {% if author.languages %}
-            <section class="section section--half" id="section-languages">
-                <h2 class="section__title">{{ strings.titles.languages }}</h2>
-                <ul class="bulletlist">
-                {% for language in author.languages %}
-                    <li class="p-skill">{{ language.name }} ({{ language.level }})</li>
-                {% endfor %}
-                </ul>
-            </section>
-            {% endif %}
-        </div>
-    {% endif %}
+    <section class="section" id="section-experience">
+        <h2 class="section__title">{{ strings.titles.experience }}</h2>
+        {% set entries = collections.work %}
+        {% set microformat = "h-event p-experience" %}
+        {% include "entrylist.njk" %}
+    </section>
 
     {% if repositories.length %}
         <section class="section" id="section-oss">
@@ -51,16 +25,16 @@ layout: base
         </section>
     {% endif %}
 
-    {% if collections.custom.length %}
+    <div class="grid grid--2col" id="custom-collection">
         {% for entry in collections.custom %}
-            <section class="section" id="{{ ['section-', entry.data.title | lower] | join }}">
+            <section class="section {% if entry.data.narrow %}section--half{% endif %}" id="{{ ['section-', entry.data.title | slugify] | join }}">
                 <h2 class="section__title">{{ entry.data.title }}</h2>
                 {% if entry.templateContent %}
-                    <div class="entry__content p-summary markdown">
+                    <div class="entry__content markdown">
                         {{ entry.templateContent | safe }}
                     </div>
                 {% endif %}
             </section>
         {% endfor %}
-    {% endif %}
+    </div>
 </main>

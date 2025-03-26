@@ -1,7 +1,9 @@
 import { EleventyHtmlBasePlugin } from '@11ty/eleventy'
 import pluginRss from '@11ty/eleventy-plugin-rss'
 import markdownIt from 'markdown-it'
+import markdownItAttrs from 'markdown-it-attrs'
 import pluginIcons from 'eleventy-plugin-icons'
+import path from 'path'
 
 import * as filters from './utils/filters.js'
 import * as transforms from './utils/transforms.js'
@@ -71,34 +73,48 @@ export default async function (config) {
             breaks: true,
             linkify: true,
             typographer: true
-        })
+        }).use(markdownItAttrs)
     )
 
     // Layouts
     config.addLayoutAlias('base', 'base.njk')
     config.addLayoutAlias('resume', 'resume.njk')
 
-    // Collections
-    const collections = ['work', 'education']
-    collections.forEach((name) => {
-        config.addCollection(name, function (collection) {
-            const folderRegex = new RegExp(`\/${name}\/`)
-            const inEntryFolder = (item) =>
-                item.inputPath.match(folderRegex) !== null
-
-            const byStartDate = (a, b) => {
-                if (a.data.start && b.data.start) {
-                    return a.data.start - b.data.start
-                }
-                return 0
+    // Collections customized with special filtering and sorting functions
+    const inEntryFolder = (name) => {
+        return (item) => path.dirname(item.inputPath).endsWith('/' + name)
+    }
+    const byFilename = (a, b) => path.basename(a.inputPath).localeCompare(path.basename(b.inputPath))
+    const bySortKey = (key) => {
+        return (a, b) => {
+            if (a.data[key] && b.data[key]) {
+                return a.data[key] - b.data[key]
             }
+            return 0
+        }
+    }
 
-            return collection
-                .getAllSorted()
-                .filter(inEntryFolder)
-                .sort(byStartDate)
-        })
-    })
+    const specialCollections = {
+        work: {
+            filter: inEntryFolder('work'),
+            sort: bySortKey('start')
+        },
+        education: {
+            filter: inEntryFolder('education'),
+            sort: bySortKey('start')
+        },
+        custom: {
+            filter: inEntryFolder('custom'),
+            sort: byFilename
+        }
+    }
+    for (const [name, {filter, sort}] of Object.entries(specialCollections)) {
+        config.addCollection(name, collection => collection
+            .getAllSorted()
+            .filter(filter)
+            .sort(sort)
+        )
+    }
 
     // Pass-through files
     config.addPassthroughCopy('src/robots.txt')
@@ -121,7 +137,6 @@ export default async function (config) {
     }
     config.addGlobalData('additionalCss', Object.entries(cssVariables)
         .map( ([name, val]) => `--${name}:${val}` ).join(';'))
-    // config.addGlobalData('pathPrefix', PATH_PREFIX)
 
     // Base Config
     return {
