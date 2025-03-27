@@ -149,8 +149,9 @@ export default async function (config) {
         const buildEnvContents = Object.entries(buildEnvData)
             .map(([key, value]) => key + "=" + value)
             .join('\n')
+            .concat('\n')
         fs.mkdirSync(path.dirname(BUILD_ENV), { recursive: true })
-        fs.appendFileSync(BUILD_ENV, buildEnvContents)
+        fs.writeFileSync(BUILD_ENV, buildEnvContents)
     }
 
     // Base Config
