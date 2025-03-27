@@ -82,11 +82,11 @@ $column-gap: $spacing-x * 2;
 // Layout, margins, font size, etc
 $print-page-margin-x: 0.5in;
 $print-page-margin-y: 0.5in;
-$print-page-size: landscape;
+$print-page-size: portrait;
 
 $print-body-font-size: 7.2pt;
 
-$print-main-column-count: 2;
+$print-main-column-min-width: 3in;
 $print-spacing-x: 5pt;
 $print-column-gap: $print-spacing-x * 2;
 

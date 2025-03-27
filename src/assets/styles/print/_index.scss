@@ -119,7 +119,7 @@
 
     main {
         @include mixins.with-column-gap;
-        column-count: variables.$print-main-column-count;
+        column-width: variables.$print-main-column-min-width;
     }
 
     .vcard {
