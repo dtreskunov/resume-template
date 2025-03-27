@@ -13,6 +13,12 @@ $breakpoints: (
     xl: 1260px
 );
 
+$print-breakpoints: (
+    md: 8in,
+    lg: 11in,
+    xl: 13in
+);
+
 $container-max-width: 1200px;
 
 // Colors
@@ -74,7 +80,7 @@ $show-footer: true;
 //
 // Layout, margins, font size, etc
 $print-page-margin: 0.5in 0.5in;
-$print-page-size: portrait;
+$print-page-size: landscape;
 
 $print-body-font-size: 7.2pt;
 

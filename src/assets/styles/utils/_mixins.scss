@@ -11,8 +11,21 @@
 /// @param {boolean} $print [false] - If the styles should also apply in print
 @mixin mq($name, $print: false) {
     $min: functions.breakpoint-min($name, variables.$breakpoints);
+    $min-print: functions.breakpoint-min($name, variables.$print-breakpoints);
     @if $min {
-        @media #{if($print, 'print, all ', 'all')} and (min-width: $min) {
+        $query: '';
+        @if $print and $min-print {
+            @if variables.$print-page-size == 'portrait' {
+                $query: 'print and (min-width: #{$min-print}), (not print) and (min-width: #{$min})';
+            } @else if variables.$print-page-size == 'landscape' {
+                $query: 'print and (min-height: #{$min-print}), (not print) and (min-width: #{$min})';
+            } @else {
+                @error 'Variable print-page-size must be either portrait or landscape';
+            }
+        } @else {
+            $query: '(min-width: #{$min})';
+        }
+        @media #{$query} {
             @content;
         }
     } @else {
@@ -26,8 +39,21 @@
 /// @param {boolean} $print [false] - If the styles should also apply in print
 @mixin mq-down($name, $print: false) {
     $min: functions.breakpoint-min($name, variables.$breakpoints);
+    $min-print: functions.breakpoint-min($name, variables.$print-breakpoints);
     @if $min {
-        @media #{if($print, 'print, all ', 'all')} and (max-width: ($min - 1px)) {
+        $query: '';
+        @if $print and $min-print {
+            @if variables.$print-page-size == 'portrait' {
+                $query: 'print and (max-width: (#{$min-print} - 1px)), (not print) and (max-width: (#{$min} - 1px))';
+            } @else if variables.$print-page-size == 'landscape' {
+                $query: 'print and (max-height: (#{$min-print} - 1px)), (not print) and (max-width: (#{$min} - 1px))';
+            } @else {
+                @error 'Variable print-page-size must be either portrait or landscape';
+            }
+        } @else {
+            $query: '(min-width: #{$min})';
+        }
+        @media #{$query} {
             @content;
         }
     } @else {
