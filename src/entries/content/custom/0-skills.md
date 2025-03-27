@@ -1,6 +1,5 @@
 ---
 title: Skills
-narrow: true
 ---
 * HTML
 * CSS

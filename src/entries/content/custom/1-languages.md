@@ -1,6 +1,5 @@
 ---
 title: Languages
-narrow: true
 ---
 * English (native)
 * German (fluent)

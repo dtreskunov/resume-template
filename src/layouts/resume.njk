@@ -25,9 +25,9 @@ layout: base
         </section>
     {% endif %}
 
-    <div class="grid grid--2col" id="custom-collection">
+    <div class="custom-sections utl-space-between">
         {% for entry in collections.custom %}
-            <section class="section {% if entry.data.narrow %}section--half{% endif %}" id="{{ ['section-', entry.data.title | slugify] | join }}">
+            <section class="section {% if entry.data.wide %}section__wide{% endif %}" id="{{ ['section-', entry.data.title | slugify] | join }}">
                 <h2 class="section__title">{{ entry.data.title }}</h2>
                 {% if entry.templateContent %}
                     <div class="entry__content markdown">

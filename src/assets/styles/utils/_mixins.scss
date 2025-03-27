@@ -116,3 +116,12 @@
     background-color: transparent;
     -webkit-appearance: none;
 }
+
+@mixin with-column-gap() {
+    @media not print {
+        column-gap: variables.$column-gap;
+    }
+    @media print {
+        column-gap: variables.$print-column-gap;
+    }
+}

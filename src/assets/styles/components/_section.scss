@@ -13,14 +13,16 @@
         border-color: variables.$gray;
         border-color: var(--gray, variables.$gray);
     }
+
+    &__wide {
+        width: 100%;
+    }
 }
 
-.grid .section {
-    grid-column: span 2;
+.custom-sections {
+    @include mixins.with-column-gap;
 
-    @include mixins.mq(md, true) {
-        &--half {
-            grid-column: span 1;
-        }
+    section {
+        flex-grow: 1;
     }
 }

@@ -14,9 +14,9 @@ $breakpoints: (
 );
 
 $print-breakpoints: (
-    md: 8in,
-    lg: 11in,
-    xl: 13in
+    md: 7in,
+    lg: 10in,
+    xl: 12in
 );
 
 $container-max-width: 1200px;
@@ -75,17 +75,20 @@ $spacing-x: 2rem;
 $spacing-y: 2rem;
 $box-shadow-elevated: 8px 8px 40px -10px rgba(0, 0, 0, 0.3);
 $show-footer: true;
+$column-gap: $spacing-x * 2;
 
 // Printing
 //
 // Layout, margins, font size, etc
-$print-page-margin: 0.5in 0.5in;
-$print-page-size: portrait;
+$print-page-margin-x: 0.5in;
+$print-page-margin-y: 0.5in;
+$print-page-size: landscape;
 
 $print-body-font-size: 7.2pt;
 
 $print-main-column-count: 2;
-$print-main-column-gap: 10pt;
+$print-spacing-x: 5pt;
+$print-column-gap: $print-spacing-x * 2;
 
 // $print-footer: $show-footer;
 $print-footer: false;

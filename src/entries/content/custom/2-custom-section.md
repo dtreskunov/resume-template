@@ -1,5 +1,6 @@
 ---
 title: Custom Section
+wide: true
 ---
 
 You can add classes, ids, and attributes to the HTML by using this syntax:

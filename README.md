@@ -156,10 +156,9 @@ If you want, you can include the five most starred repositories from your Github
 
 ### 5. Custom Content
 
-Edit the files in `entries/content/custom` if you want to add freeform content to the end of the CV. This could be a legal disclaimer or an additional section. Delete the files if you don't want these sections to show up. 
-
-If the custom content section doesn't contain a lot of text, you can make it take up less space by adding `narrow: true`
-to add another section, add another entry with `tags: custom` in the [frontmatter](https://www.11ty.dev/docs/data-frontmatter/) data.
+Edit the files in `entries/content/custom` if you want to add a freeform section to the end of the CV. This could be a legal disclaimer or an additional
+section. Delete the files if you don't want these sections to show up. If a section doesn't contain a lot of text, it will only be as wide as needed.
+To assume the full width, add `wide: true` to the [frontmatter](https://www.11ty.dev/docs/data-frontmatter/) data.
 
 ### 6. Meta Data & Design
 

@@ -1,3 +1,4 @@
+@use "../utils/mixins";
 @use "../utils/variables";
 
 @media print {
@@ -6,7 +7,11 @@
     // GENERAL PRINT RESET
 
     @page {
-        margin: variables.$print-page-margin;
+        margin-left: variables.$print-page-margin-x;
+        margin-right: variables.$print-page-margin-x;
+        margin-top: variables.$print-page-margin-y;
+        margin-bottom: variables.$print-page-margin-y;
+
         size: variables.$print-page-size;
     }
 
@@ -113,8 +118,8 @@
     }
 
     main {
+        @include mixins.with-column-gap;
         column-count: variables.$print-main-column-count;
-        column-gap: variables.$print-main-column-gap;
     }
 
     .vcard {
