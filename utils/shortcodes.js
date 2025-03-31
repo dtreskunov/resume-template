@@ -22,12 +22,14 @@ qrCode.paired = true
  * @see https://github.com/joaocarmo/vcard-creator/blob/main/lib/VCard.ts
  */
 export function vCard(...fields) {
-    const {jobTitle, email, phoneNumber, url, fullName, note, photo, photoUrl} = _.merge(...fields)
+    const {jobTitle, email, phoneNumber, urls, fullName, note, photo, photoUrl} = _.merge(...fields)
     const result = new VCard()
     if (!!jobTitle) result.addJobtitle(jobTitle)
     if (!!email) result.addEmail(email)
     if (!!phoneNumber) result.addPhoneNumber(phoneNumber, 'CELL')
-    if (!!url) result.addURL(url)
+    if (!!urls) {
+        for (const url of urls) result.addURL(url)
+    }
     if (!!fullName) result.setProperty('fullname', `FN${result.getCharsetString()}`, fullName)
 
     if (note) result.addNote(note)
