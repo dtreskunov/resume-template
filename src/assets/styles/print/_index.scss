@@ -38,19 +38,6 @@
         transition: none !important;
     }
 
-    p,
-    h2,
-    h3 {
-        orphans: 3;
-        widows: 3;
-    }
-
-    h1,
-    h2,
-    h3 {
-        page-break-after: avoid;
-    }
-
     // ELEMENTS
     // PRINT STYLE ADJUSTMENTS
 
@@ -97,10 +84,6 @@
         padding: 0 !important;
     }
 
-    .section__title {
-        margin-bottom: 0.5rem;
-    }
-
     .entrylist::before,
     .entrylist__item::before,
     .bulletlist li::before {
@@ -111,14 +94,10 @@
 
     .entrylist__item,
     .entry {
-        widows: 3;
-        orphans: 3;
         padding: 0;
-        page-break-inside: avoid;
     }
 
     main {
-        @include mixins.with-column-gap;
         column-width: variables.$print-main-column-min-width;
     }
 
@@ -147,7 +126,10 @@
     
     section {
         padding-top: 0 !important;
-        page-break-inside: auto !important;
+
+        .title {
+            margin-bottom: 0.5rem !important;
+        }
     }
 
     .entrylist {

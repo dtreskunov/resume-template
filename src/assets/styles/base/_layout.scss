@@ -18,6 +18,10 @@ body {
     }
     .main {
         grid-area: main;
+
+        .container {
+            @include mixins.with-column-gap;
+        }
     }
     .sidebar {
         grid-area: sidebar;

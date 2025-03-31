@@ -29,6 +29,7 @@
     &__item {
         position: relative;
         padding-left: variables.$spacing-x;
+        break-inside: avoid;
 
         &::before {
             content: '';

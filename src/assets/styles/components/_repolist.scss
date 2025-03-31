@@ -1,6 +1,9 @@
 @use "../utils/variables";
 
 .repolist {
+    &__item {
+        break-inside: avoid;
+    }
     &__item:not(:last-child) {
         margin-bottom: 1.5rem;
     }
